@@ -675,7 +675,7 @@
                 <div class="pt-1">
                     <h4 class="font-bold text-slate-900 text-xs mb-1 uppercase tracking-wider text-brand-700">Alamat & Lokasi</h4>
                     <p class="text-slate-600 mb-2">📍 Jl. Veteran No.29, Sungai Bilu, Kec. Banjarmasin Tim., Kota Banjarmasin, Kalimantan Selatan 70239.</p>
-                    <a href="https://maps.app.goo.gl/3U5g9L82xR1z4YvG8" target="_blank" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl transition flex items-center justify-center space-x-2 text-xs shadow cursor-pointer">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Puskesmas+Sungai+Bilu+Banjarmasin" target="_blank" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl transition flex items-center justify-center space-x-2 text-xs shadow cursor-pointer">
                         <i class="fa-solid fa-map-location-dot"></i><span>Buka Lokasi di Google Maps</span>
                     </a>
                 </div>
@@ -1690,7 +1690,7 @@
             document.getElementById('modal-material-title').innerText = title;
             document.getElementById('modal-material-body').innerText = body;
             const modal = document.getElementById('material-modal');
-            if(modal) modal.classList.remove('hidden');
+            if(modal) modal.classList.add('hidden');
         }
 
         function closeMaterialModal() {
