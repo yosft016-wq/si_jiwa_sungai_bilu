@@ -83,7 +83,7 @@
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600">
                     <a href="#section-informasi" class="hover:text-brand-600 transition">Informasi</a>
                     <a href="#" onclick="openProfileModal()" class="hover:text-brand-600 transition">Profil</a>
-                    <a href="#" onclick="openPublicModal('Jadwal Pelayanan Puskesmas', '• Senin - Kamis: 08.00 - 12.00 WITA\n• Jumat: 08.00 - 10.00 WITA\n• Sabtu: 08.00 - 11.30 WITA\n\nCATATAN: JAM PELAYANAN TERSEBUT TIDAK BERLAKU PADA PASIEN GAWAT DARURAT')" class="hover:text-brand-600 transition">Jadwal</a>
+                    <button type="button" onclick="openPublicModal('Jadwal Pelayanan Puskesmas', '• Senin - Kamis: 08.00 - 12.00 WITA\n• Jumat: 08.00 - 10.00 WITA\n• Sabtu: 08.00 - 11.30 WITA\n\nCATATAN: JAM PELAYANAN TERSEBUT TIDAK BERLAKU PADA PASIEN GAWAT DARURAT')" class="text-slate-600 hover:text-brand-600 transition bg-transparent border-none cursor-pointer text-sm font-medium">Jadwal</button>
                     <a href="https://play.google.com/store/apps/details?id=app.bpjs.mobile" target="_blank" class="text-blue-600 hover:text-blue-700 font-semibold flex items-center space-x-1">
                         <i class="fa-solid fa-mobile-screen"></i><span>Daftar Online (Mobile JKN)</span>
                     </a>
@@ -934,7 +934,7 @@
         </div>
     </div>
 
-    <!-- MODAL: BACA MATERI -->
+    <!-- MODAL: BACA MATERI / INFORMASI PUBLIK -->
     <div id="material-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
             <h3 id="modal-material-title" class="font-bold text-slate-900 text-lg mb-2">Judul Materi</h3>
@@ -1690,7 +1690,7 @@
             document.getElementById('modal-material-title').innerText = title;
             document.getElementById('modal-material-body').innerText = body;
             const modal = document.getElementById('material-modal');
-            if(modal) modal.classList.add('hidden');
+            if(modal) modal.classList.remove('hidden');
         }
 
         function closeMaterialModal() {
