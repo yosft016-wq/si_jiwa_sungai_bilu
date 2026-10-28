@@ -847,6 +847,8 @@ img,video,canvas,iframe{max-width:100%}
                 <button type="button" onclick="switchPublicTab('informasi'); toggleMobileMenu();" class="block w-full text-left py-2 hover:text-[#24424C] border-b border-slate-100">Informasi & Edukasi</button>
                 <a href="#" onclick="openProfileModal(); toggleMobileMenu(); return false;" class="block py-2 hover:text-[#24424C] border-b border-slate-100">Profil (Visi Misi)</a>
                 <a href="#" onclick="openScheduleModal(); toggleMobileMenu(); return false;" class="block py-2 hover:text-[#24424C] border-b border-slate-100">Jadwal Pelayanan Poli</a>
+                <button type="button" onclick="toggleMobileMenu(); showPatientLogin();" class="sj-mobile-action block w-full text-left py-2 border-b border-slate-100"><i class="fa-solid fa-calendar-check mr-2"></i>Jadwal Obat &amp; Kontrol</button>
+                <button type="button" onclick="toggleMobileMenu(); showLogin();" class="sj-mobile-action block w-full text-left py-2"><i class="fa-solid fa-right-to-bracket mr-2"></i>Login Petugas</button>
             </div>
         </header>
 
@@ -2499,7 +2501,13 @@ img,video,canvas,iframe{max-width:100%}
                     renderUsers();
                 }, (error) => {
                     console.error('Gagal memuat akun petugas dari Firebase:', error);
-                    alert('Akun petugas tidak dapat dimuat. Periksa koneksi dan aturan Firestore.');
+                    if (error && error.code === 'permission-denied') {
+                        alert('Login berhasil, tetapi daftar akun petugas ditolak oleh Firestore (permission-denied). Periksa Firestore Rules agar koleksi users hanya dapat dibaca Admin dengan custom claim sajiwaRole: "admin". Jangan membuka akses publik.');
+                    } else if (error && error.code === 'unavailable') {
+                        alert('Daftar akun petugas tidak dapat dimuat karena layanan Firestore tidak tersedia. Periksa koneksi internet dan status Firebase.');
+                    } else {
+                        alert('Akun petugas tidak dapat dimuat. Kode: ' + ((error && error.code) || 'tidak diketahui') + '. Periksa koneksi dan aturan Firestore.');
+                    }
                 });
             }
         }
@@ -2889,7 +2897,9 @@ img,video,canvas,iframe{max-width:100%}
   }
 </style>
 
-</head><body><h1>SAJIWA — Puskesmas Sungai Bilu</h1><h2>Hasil Skrining Kesehatan Jiwa</h2><div class="row"><b>Instrumen:</b> ${esc(r.instrumentTitle)}</div><div class="row"><b>Nama:</b> ${esc(r.patientName)}</div><div class="row"><b>NIK:</b> ${esc(r.nik||'Tidak dicantumkan')}</div><div class="row"><b>Tanggal lahir:</b> ${esc(r.dob||'-')}</div><div class="row"><b>Umur:</b> ${esc(r.age||'-')}</div><div class="row"><b>Jenis kelamin:</b> ${esc(r.gender||'-')}</div><div class="row"><b>Alamat:</b> ${esc(r.address||'-')}</div><div class="row"><b>Kelurahan/Desa:</b> ${esc(r.kelurahan||'-')}</div><div class="row"><b>Kecamatan:</b> ${esc(r.kecamatan||'-')}</div><div class="row"><b>Kota/Kabupaten:</b> ${esc(r.kota||'-')}</div><div class="row"><b>Wilayah / RT / RW:</b> ${esc(r.wilayah||'-')}</div><div class="row"><b>Tanggal skrining:</b> ${esc(r.screeningDate)}</div><div class="row"><b>Petugas:</b> ${esc(r.clinician||'-')}</div><h2>Hasil</h2><div class="row"><b>Skor total:</b> ${r.score}</div><div class="row"><b>Interpretasi:</b> ${esc(r.interpretation)}</div><div class="row"><b>Tindak lanjut:</b> ${esc(r.followup)}</div><div class="note">Skrining bukan diagnosis. Hasil harus ditinjau tenaga kesehatan dan ditindaklanjuti sesuai pedoman/SOP yang berlaku. Dokumen ini memuat data kesehatan pribadi; simpan dan bagikan secara aman.</div><p><button onclick="window.print()">Cetak / Simpan sebagai PDF</button></p></body></html>`);
+</head><body><h1>SAJIWA — Puskesmas Sungai Bilu</h1><h2>Hasil Skrining Kesehatan Jiwa</h2><div class="row"><b>Instrumen:</b> ${esc(r.instrumentTitle)}</div><div class="row"><b>Nama:</b> ${esc(r.patientName)}</div><div class="row"><b>NIK:</b> ${esc(r.nik||'Tidak dicantumkan')}</div><div class="row"><b>Tanggal lahir:</b> ${esc(r.dob||'-')}</div><div class="row"><b>Umur:</b> ${esc(r.age||'-')}</div><div class="row"><b>Jenis kelamin:</b> ${esc(r.gender||'-')}</div><div class="row"><b>Alamat:</b> ${esc(r.address||'-')}</div><div class="row"><b>Kelurahan/Desa:</b> ${esc(r.kelurahan||'-')}</div><div class="row"><b>Kecamatan:</b> ${esc(r.kecamatan||'-')}</div><div class="row"><b>Kota/Kabupaten:</b> ${esc(r.kota||'-')}</div><div class="row"><b>Wilayah / RT / RW:</b> ${esc(r.wilayah||'-')}</div><div class="row"><b>Tanggal skrining:</b> ${esc(r.screeningDate)}</div><div class="row"><b>Petugas:</b> ${esc(r.clinician||'-')}</div><h2>Hasil</h2><div class="row"><b>Skor total:</b> ${r.score}</div><div class="row"><b>Interpretasi:</b> ${esc(r.interpretation)}</div><div class="row"><b>Tindak lanjut:</b> ${esc(r.followup)}</div><div class="note">Skrining bukan diagnosis. Hasil harus ditinjau tenaga kesehatan dan ditindaklanjuti sesuai pedoman/SOP yang berlaku. Dokumen ini memuat data kesehatan pribadi; simpan dan bagikan secara aman.</div><p><button onclick="window.print()">Cetak / Simpan sebagai PDF</button></p>
+
+\n</body></html>`);
             w.document.close();
         }
 
@@ -3968,5 +3978,32 @@ img,video,canvas,iframe{max-width:100%}
             if(imtField) imtField.value = `${imt.toFixed(1)} (${cat})`;
         }
     </script>
+<style id="sajiwa-portrait-header-final-fix">
+/* Pada layar portrait/tablet, pindahkan tombol akses ke menu hamburger agar tidak bertumpuk. */
+#public-page .sj-mobile-action { color:#FFFFFF !important; background:transparent !important; }
+#public-page .sj-mobile-action:hover { color:#D8E6EB !important; }
+@media (max-width: 1023px) {
+  #public-page > header > div:first-child { height:auto !important; min-height:68px !important; }
+  #public-page > header > div:first-child > div:last-child { margin-left:auto !important; gap:0 !important; }
+  #public-page > header .sj-patient-access,
+  #public-page > header .sj-login-access { display:none !important; }
+  #public-page > header button[onclick="toggleMobileMenu()"] {
+    display:inline-flex !important; visibility:visible !important; opacity:1 !important;
+    width:44px !important; height:44px !important; padding:10px !important;
+    align-items:center !important; justify-content:center !important;
+    color:#FFFFFF !important; background:#24424C !important; border:1px solid #54727B !important;
+    border-radius:12px !important; flex:0 0 44px !important; position:relative !important;
+    z-index:100 !important;
+  }
+  #public-page > header button[onclick="toggleMobileMenu()"] i { color:#FFFFFF !important; font-size:22px !important; }
+  #public-page > header #mobile-menu { width:100% !important; box-sizing:border-box !important; }
+}
+@media (max-width: 639px) {
+  #public-page > header > div:first-child { padding-left:14px !important; padding-right:14px !important; }
+  #public-page > header > div:first-child > div:first-child { min-width:0 !important; }
+  #public-page > header > div:first-child > div:first-child h1 { font-size:13px !important; }
+  #public-page > header > div:first-child > div:first-child p { font-size:9px !important; white-space:normal !important; }
+}
+</style>
 </body>
 </html>
